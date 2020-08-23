@@ -269,6 +269,43 @@ bool NMEA0183SetGLL(tNMEA0183Msg &NMEA0183Msg, double GPSTime, double Latitude, 
   return true;
 }
 
+//*****************************************************************************
+//$GPAPB,A,A,0.025,R,N,,,359.9,T,2,42.9,T,42.9,T,A*52
+bool NMEA0183ParseAPB_nc(const tNMEA0183Msg &NMEA0183Msg, char &status1, char &status2, double &xte, bool &circle, bool &perpendicular, double &bearingOrig, char &typeOrigBearing, char waypoint[], double &bearingPos, char &typePosBearing, double &heading, char &typeHeading) {
+	bool result=( NMEA0183Msg.FieldCount()>=14 );
+
+	if ( result ) {
+		status1=NMEA0183Msg.Field(0)[0];
+		status2=NMEA0183Msg.Field(1)[0];
+		xte=atof(NMEA0183Msg.Field(2))*nmTom;
+		if (NMEA0183Msg.Field(3)[0]=='R') xte=-xte;
+		circle=(NMEA0183Msg.Field(5)[0] == 'A');
+		perpendicular=(NMEA0183Msg.Field(6)[0] == 'A');
+		bearingOrig=atof(NMEA0183Msg.Field(7))*degToRad;
+		typeOrigBearing=NMEA0183Msg.Field(8)[0];
+		strncpy(waypoint,NMEA0183Msg.Field(9),sizeof(waypoint)/sizeof(char));
+		waypoint[sizeof(waypoint)/sizeof(char)-1]='\0';
+		bearingPos=atof(NMEA0183Msg.Field(10))*degToRad;
+		typePosBearing=NMEA0183Msg.Field(11)[0];
+		heading=atof(NMEA0183Msg.Field(12))*degToRad;
+		typeHeading=NMEA0183Msg.Field(13)[0];
+	}
+	return result;
+}
+
+//*****************************************************************************
+//$GPXTE,A,A,0.025,R,N,*6B
+bool NMEA0183ParseXTE_nc(const tNMEA0183Msg &NMEA0183Msg, char &status1, char &status2, double &xte) {
+	bool result=( NMEA0183Msg.FieldCount()>=5 );
+
+	if ( result ) {
+		status1=NMEA0183Msg.Field(0)[0];
+		status2=NMEA0183Msg.Field(1)[0];
+		xte=atof(NMEA0183Msg.Field(2))*nmTom;
+		if (NMEA0183Msg.Field(3)[0]=='R') xte=-xte;
+	}
+	return result;
+}
 
 //*****************************************************************************
 //$GPRMB,A,0.15,R,WOUBRG,WETERB,5213.400,N,00438.400,E,009.4,180.2,,V*07

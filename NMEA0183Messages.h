@@ -209,6 +209,11 @@ bool NMEA0183SetGLL(tNMEA0183Msg &NMEA0183Msg, double GPSTime, double Latitude, 
 bool NMEA0183ParseAPB_nc(const tNMEA0183Msg &NMEA0183Msg, char &status1, char &status2, double &xte, bool &circle, bool &perpendicular, double &bearingOrig, char &typeOrigBearing, char waypoint[], double &bearingPos, char &typePosBearing, double &heading, char &typeHeading);
 //*****************************************************************************
 bool NMEA0183ParseXTE_nc(const tNMEA0183Msg &NMEA0183Msg, char &status1, char &status2, double &xte);
+
+//*****************************************************************************
+//$--ZTG,hhmmss.ss,hhmmss.ss,c--c*hh<CR><LF>
+bool NMEA0183ParseZTG_nc(const tNMEA0183Msg &NMEA0183Msg, double &utctime, double &time_remaining, char waypoint[]);
+
 //*****************************************************************************
 bool NMEA0183ParseRMB_nc(const tNMEA0183Msg &NMEA0183Msg, tRMB &rmb);
 

@@ -335,7 +335,19 @@ bool NMEA0183ParseRMB_nc(const tNMEA0183Msg &NMEA0183Msg, tRMB &RMB) {
   return result;
 
 }
+//*****************************************************************************
+//$--ZTG,hhmmss.ss,hhmmss.ss,c--c*hh<CR><LF>
+bool NMEA0183ParseZTG_nc(const tNMEA0183Msg &NMEA0183Msg, double &utctime, double &time_remaining, char waypoint[]) {
+	bool result=( NMEA0183Msg.FieldCount()>=4 );
 
+	if ( result ) {
+		utctime = NMEA0183GPTimeToSeconds(NMEA0183Msg.Field(0));
+		time_remaining = NMEA0183GPTimeToSeconds(NMEA0183Msg.Field(1));
+		strncpy(waypoint,NMEA0183Msg.Field(9),sizeof(waypoint)/sizeof(char));
+		waypoint[sizeof(waypoint)/sizeof(char)-1]='\0';
+	}
+	return result;
+}
 //*****************************************************************************
 // $GPRMC,092348.00,A,6035.04228,N,02115.15472,E,0.01,272.61,060815,7.2,E,D*34
 bool NMEA0183ParseRMC_nc(const tNMEA0183Msg &NMEA0183Msg, double &GPSTime, double &Latitude, double &Longitude,
